@@ -1,14 +1,16 @@
 class Solution {
     public int nthUglyNumber(int n) {
-        int[] ugly = new int[n];
-        ugly[0] = 1;
-        int p2 = 0, p3 = 0, p5 = 0;
-        for (int i = 1; i < n; i++) {
-            ugly[i] = Math.min(ugly[p2] * 2, Math.min(ugly[p3] * 3, ugly[p5] * 5));
-            if (ugly[i] == ugly[p2] * 2) p2++;
-            if (ugly[i] == ugly[p3] * 3) p3++;
-            if (ugly[i] == ugly[p5] * 5) p5++;
+        PriorityQueue<Long> heap = new PriorityQueue<>();
+        Set<Long> seen = new HashSet<>();
+        heap.add(1L);
+        seen.add(1L);
+        long currentUgly = 1L;
+        for (int i = 0; i < n; i++) {
+            currentUgly = heap.poll();
+            if (seen.add(currentUgly * 2)) heap.add(currentUgly * 2);
+            if (seen.add(currentUgly * 3)) heap.add(currentUgly * 3);
+            if (seen.add(currentUgly * 5)) heap.add(currentUgly * 5);
         }
-        return ugly[n - 1];
+        return (int) currentUgly;
     }
 }
