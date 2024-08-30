@@ -1,34 +1,28 @@
 class Solution {
     public int minDays(int[] bloomDay, int m, int k) {
-        int start = 1;
-        int end = Arrays.stream(bloomDay).max().getAsInt();
-        int ans = -1;
-        
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
-            int currLength = 0;
-            int count = 0;
-            
-            for (int i = 0; i < bloomDay.length; i++) {
-                if (bloomDay[i] <= mid) {
-                    currLength++;
-                    if (currLength >= k) {
-                        currLength = 0;
-                        count++;
-                    }
-                } else {
-                    currLength = 0;
+        int n=bloomDay.length;
+        if(n<m*k)return -1;
+        int max=bloomDay[0];
+        for(int i=1;i<n;i++)if(bloomDay[i]>max)max=bloomDay[i];
+        int l=0, r=max,min=-1;
+        while(l<=r){
+            int mid=(l+r)/2;
+            int bc=0,nfc=0;
+            for(int i=0;i<n;i++){
+                if(bloomDay[i]<=mid)nfc++;
+                else nfc=0;
+                if(nfc==k){
+                    bc++;
+                    nfc=0;
                 }
+                if(bc==m)break;
             }
-            
-            if (count >= m) {
-                ans = mid;
-                end = mid - 1;
-            } else {
-                start = mid + 1;
+            if(bc<m)l=mid+1;
+            else {
+                min=mid;
+                r=mid-1;
             }
         }
-
-        return ans;
+        return min;
     }
 }
