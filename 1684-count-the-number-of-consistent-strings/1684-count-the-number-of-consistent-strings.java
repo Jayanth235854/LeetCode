@@ -1,20 +1,18 @@
 class Solution {
     public int countConsistentStrings(String allowed, String[] words) {
-        Set<Character> allowedSet = new HashSet<>();
-        for (char c : allowed.toCharArray()) {
-            allowedSet.add(c);
-        }
-        int consistentCount = 0;
-        for (String word : words) {
-            boolean isConsistent = true;
-            for (char c : word.toCharArray()) {
-                if (!allowedSet.contains(c)) {
-                    isConsistent = false;
+        Set<Character> dup=new HashSet();
+        int ans=0;
+        for(char a:allowed.toCharArray())dup.add(a);
+        for(String a:words){
+            boolean present=true;
+            for(char ch:a.toCharArray()){
+                if(!dup.contains(ch)){
+                    present=false;
                     break;
                 }
             }
-            if (isConsistent) consistentCount++;
+            if(present) ans++;
         }
-        return consistentCount;
+        return ans;
     }
 }
