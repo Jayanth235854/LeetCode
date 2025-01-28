@@ -29,11 +29,7 @@ class Solution {
         return root;
     }
     public int min(TreeNode root){
-        int min=-1;
-        while(root!=null){
-            min=root.val;
-            root=root.left;
-        }
-        return min;
+        if (root.left == null) return root.val;
+        return min(root.left);
     }
 }
