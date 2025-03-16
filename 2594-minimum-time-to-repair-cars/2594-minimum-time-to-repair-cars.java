@@ -10,7 +10,7 @@ class Solution {
     }
 
     public long repairCars(int[] ranks, int cars) {
-        long l = 1, r = (long) 1e14;
+        long l = 1, r = Long.MAX_VALUE;
         while (l < r) {
             long mid = (l + r) / 2;
             if (timeIsSuff(ranks, cars, mid)) {
