@@ -1,23 +1,21 @@
 class Solution {
     public int[] findEvenNumbers(int[] digits) {
-        ArrayList<Integer> ans=new ArrayList<>();
-        int n=digits.length;
+        Set<Integer> temp=new LinkedHashSet<>();
+        int n=digits.length,z=0;
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 if(i==j)continue;
                 for(int k=0;k<n;k++){
-                    if(i==k || j==k || i==j)continue;
+                    if(i==k || j==k)continue;
                     int a=digits[i]*100+digits[j]*10+digits[k];
                     if(a<100)continue;
-                    if(a%2==0)ans.add(a);
+                    if(a%2==0)temp.add(a);
                 }
             }
         }
-        Set<Integer> l=new LinkedHashSet<Integer>(ans);
-        ArrayList<Integer> al=new ArrayList<>(l);
-        int[] arr=new int[al.size()];
-        for(int i=0;i<al.size();i++){
-            arr[i]=al.get(i);
+        int[] arr=new int[temp.size()];
+        for(int val:temp){
+            arr[z++]=val;
         }
         Arrays.sort(arr);
         return arr;
