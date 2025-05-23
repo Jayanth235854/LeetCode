@@ -1,21 +1,33 @@
 class Solution {
     public long maximumValueSum(int[] nums, int k, int[][] edges) {
-        long total = 0,totalDiff = 0,diff, minAbsDiff = Long.MAX_VALUE;;
-        for (int num : nums) {
-            total += num;
-        }
-        int positiveCount = 0;
-        for (int num : nums) {
-            diff = (num ^ k) - num;
-            if (diff > 0) {
-                totalDiff += diff;
-                positiveCount++;
+        long base = 0, sumPos = 0;
+        int cntPos = 0;
+        long minPos = Long.MAX_VALUE;
+        long bestNonpos = Long.MIN_VALUE;
+        boolean sawNonpos = false;
+        
+        for (int x : nums) {
+            base += x;
+            long d = (long)(x ^ k) - x;
+            if (d > 0) {
+                cntPos++;
+                sumPos += d;
+                if (d < minPos) minPos = d;
+            } else {
+                if (!sawNonpos || d > bestNonpos) {
+                    bestNonpos = d;
+                    sawNonpos = true;
+                }
             }
-            minAbsDiff = Math.min(minAbsDiff, Math.abs(diff));
         }
-        if (positiveCount % 2 == 1) {
-            totalDiff -= minAbsDiff;
+        
+        if ((cntPos & 1) == 0) {
+            return base + sumPos;
         }
-        return total + totalDiff;
+        long loss = minPos;
+        if (sawNonpos) {
+            loss = Math.min(loss, -bestNonpos);
+        }
+        return base + sumPos - loss;
     }
 }
