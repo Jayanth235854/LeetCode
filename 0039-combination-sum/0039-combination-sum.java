@@ -1,19 +1,20 @@
 class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> ans=new ArrayList<>();
-        findComb(0,candidates,target,ans,new ArrayList<>());
+        List<Integer> cur=new ArrayList<>();
+        help(0,candidates,target,ans,cur);
         return ans;
     }
-    public void findComb(int ind, int[] arr, int target, List<List<Integer>> ans, List<Integer> ds){
-        if(ind==arr.length){
-            if(target==0)ans.add(new ArrayList<>(ds));
+    public void help(int start,int[] ls,int target, List<List<Integer>> ans, List<Integer> cur){
+        if(target==0){
+            ans.add(new ArrayList<>(cur));
             return;
         }
-        if(arr[ind]<=target){
-            ds.add(arr[ind]);
-            findComb(ind, arr, target-arr[ind], ans, ds);
-            ds.remove(ds.size()-1);
+        if(target<0) return;
+        for(int i=start;i<ls.length;i++){
+            cur.add(ls[i]);
+            help(i,ls,target-ls[i],ans,cur);
+            cur.remove(cur.size()-1);
         }
-        findComb(ind+1, arr, target,ans,ds);
     }
 }
