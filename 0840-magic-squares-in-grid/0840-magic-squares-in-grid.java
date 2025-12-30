@@ -1,34 +1,55 @@
 class Solution {
-    int ans=0;
     public int numMagicSquaresInside(int[][] grid) {
-        int  n=grid.length;
-        int m=grid[0].length;
-        if(n<3 || m<3) return 0;
-        
-        for(int i=0;i<=n-3;i++)
-            for(int j=0;j<=n-3;j++) help(i,j,grid);
-        return ans;
-    }
-    public void help(int x,int y,int mat[][])
-    {
-       int sum[]=new int[3];
-       int sumcol[]=new int[3];
-       boolean[] arr=new boolean[10];
-
-       for(int i=0;i<3;i++)
-        for(int j=0;j<3;j++){
-            sum[i]+=mat[x+i][y+j];
-            sumcol[j]+=mat[x+i][y+j];
-            
-            if(mat[x+i][y+j]>9 || mat[x+i][y+j]==0 || arr[mat[x+i][y+j]]==true) return;
-            arr[mat[x+i][y+j]]=true;
+        int m=grid.length,n=grid[0].length;
+        int count=0;
+        if(m<3 || n<3) return 0;
+        for(int i=0;i<=m-3;i++){
+            for(int j=0;j<=n-3;j++){
+                if(checkMagic(grid,i,j,i+3,j+3)) count++;
+            }
         }
-       
-       for(int i=1;i<3;i++)
-         if(sum[i]!=sum[i-1] || sum[i]!=sumcol[i] || sumcol[i]!=sumcol[i-1]) return;
-       
-       int dig=mat[x][y]+mat[x+1][y+1]+mat[x+2][y+2];
-       if(dig!=(mat[x][y+2]+mat[x+1][y+1]+mat[x+2][y]) || dig!=sum[0]) return;
-       ans++;
+        return count;
+    }
+    public boolean checkMagic(int[][] grid,int row,int col,int m,int n){
+        int colSum=-1,rowSum=-1;
+        int[] arr=new int[10];
+        for(int i=row;i<m;i++){
+            for(int j=col;j<n;j++){
+                if(grid[i][j]<10)arr[grid[i][j]]++;
+                else return false;
+            }
+        }
+        for(int i=1;i<10;i++){
+            if(arr[i]!=1) return false;
+        }
+        for(int i=row;i<m;i++){
+            int sum=0;
+            for(int j=col;j<n;j++){
+                if(grid[i][j]>9) return false;
+                sum+=grid[i][j];
+            }
+            if(sum!=rowSum && rowSum!=-1) return false;
+            rowSum=sum;
+        }
+        for(int i=col;i<n;i++){
+            int sum=0;
+            for(int j=row;j<m;j++){
+                if(grid[j][i]>9) return false;
+                sum+=grid[j][i];
+            }
+            if(sum!=colSum && colSum!=-1) return false;
+            colSum=sum;
+        }
+        int sum1=0,sum2=0;
+        for(int i=row, j=col;i<m && j<n;i++,j++){
+            if(grid[i][j]>9)return false;
+            sum1+=grid[i][j];
+        }
+        for(int i=row, j=n-1;i<m && j>=0;i++,j--){
+            if(grid[i][j]>9)return false;
+            sum2+=grid[i][j];
+        }
+        if(sum1!=sum2) return false;
+        return true;
     }
 }
